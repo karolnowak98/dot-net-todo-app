@@ -16,24 +16,24 @@ namespace TodoApp.API.Repositories.Implementations
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<GetUserDto>> GetAllAsync()
+        public async Task<IEnumerable<GetUserDto>> GetAll()
         {
             var users = await _context.Users.ToListAsync();
 
             return users.Select(u => _mapper.Map<GetUserDto>(u));
         }
 
-        public async Task<GetUserDto?> GetByIdAsync(Guid id)
+        public async Task<GetUserDto?> GetUserById(Guid id)
         {
             var user = await _context.Users.FindAsync(id);
 
             return _mapper.Map<GetUserDto>(user);
         }
 
-        public async Task<ApplicationUser?> GetByEmailAsync(string email) => await _manager.Users.FirstOrDefaultAsync(u => u.Email == email);
-        public async Task<IEnumerable<string>> GetRolesAsync(ApplicationUser user) => await _manager.GetRolesAsync(user);
+        public async Task<ApplicationUser?> GetUserByEmail(string email) => await _manager.Users.FirstOrDefaultAsync(u => u.Email == email);
+        public async Task<IEnumerable<string>> GetRoles(ApplicationUser user) => await _manager.GetRolesAsync(user);
 
-        public async Task<ServiceResponse> CreateAsync(RegisterDto registerDto)
+        public async Task<ServiceResponse> CreateUser(RegisterDto registerDto)
         {
             var user = _mapper.Map<ApplicationUser>(registerDto);
             user.SecurityStamp = Guid.NewGuid().ToString();
@@ -57,7 +57,7 @@ namespace TodoApp.API.Repositories.Implementations
             return new ServiceResponse();
         }
 
-        public async Task<bool> CheckPasswordAsync(ApplicationUser user, string password)
+        public async Task<bool> CheckPassword(ApplicationUser user, string password)
         {
             return await _manager.CheckPasswordAsync(user, password);
         }

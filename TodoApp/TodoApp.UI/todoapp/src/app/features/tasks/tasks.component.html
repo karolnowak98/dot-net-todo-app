@@ -1,0 +1,16 @@
+<div class="container mt-5">
+  <h2 class="mb-4">Tasks</h2>
+  <div class="overflow-auto">
+    <div *ngFor="let task of tasks" class="card mb-3">
+      <div class="card-body">
+        <h3 class="card-title">{{ task.title }}</h3>
+        <p class="card-text">Description: {{ task.description }}</p>
+        <p class="card-text">Deadline: {{ task.deadline | date:'medium' }}</p>
+        <p class="card-text">Priority: {{ task.priority }}</p>
+        <p class="card-text">Status: {{ task.status }}</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+

@@ -15,15 +15,15 @@ namespace TodoApp.API.Services.Implementations
             _configuration = configuration;
         }
         
-        public async Task<ServiceResponse<IEnumerable<GetUserDto>>> GetAllUsers()
+        public async Task<ServiceResponse<IEnumerable<GetUserDto>>> GetUsers()
         {
-            var users = await _repository.GetAllAsync();
+            var users = await _repository.GetAll();
             return new ServiceResponse<IEnumerable<GetUserDto>> { Data = users };
         }
         
         public async Task<ServiceResponse<GetUserDto>> GetUserById(Guid id)
         {
-            var user = await _repository.GetByIdAsync(id);
+            var user = await _repository.GetUserById(id);
 
             if (user == null)
             {
@@ -37,14 +37,14 @@ namespace TodoApp.API.Services.Implementations
             return new ServiceResponse<GetUserDto> { Data = user };
         }
         
-        public async Task<ServiceResponse> RegisterUser(RegisterDto registerDto)
+        public async Task<ServiceResponse> Register(RegisterDto registerDto)
         {
-            return await _repository.CreateAsync(registerDto);
+            return await _repository.CreateUser(registerDto);
         }
 
         public async Task<ServiceResponse<string>> Login(LoginDto loginDto)
         {
-            var user = await _repository.GetByEmailAsync(loginDto.Email);
+            var user = await _repository.GetUserByEmail(loginDto.Email);
 
             if (user is null)
             {
@@ -55,7 +55,7 @@ namespace TodoApp.API.Services.Implementations
                 };
             }
 
-            var isPasswordCorrect = await _repository.CheckPasswordAsync(user, loginDto.Password);
+            var isPasswordCorrect = await _repository.CheckPassword(user, loginDto.Password);
 
             if (!isPasswordCorrect)
             {
@@ -66,7 +66,7 @@ namespace TodoApp.API.Services.Implementations
                 };
             }
 
-            var userRoles = await _repository.GetRolesAsync(user);
+            var userRoles = await _repository.GetRoles(user);
 
             var authClaims = new List<Claim>
             {
@@ -79,7 +79,7 @@ namespace TodoApp.API.Services.Implementations
 
             var token = GenerateNewJsonWebToken(authClaims);
 
-            return new ServiceResponse<string>() { Data = token };
+            return new ServiceResponse<string> { Data = token };
         }
 
         private string GenerateNewJsonWebToken(IEnumerable<Claim> claims)

@@ -16,7 +16,7 @@ namespace TodoApp.API.Controllers
         [HttpGet("GetAllUsers")]
         public async Task<ActionResult<ServiceResponse<IEnumerable<LoginDto>>>> GetAllUsers()
         {
-            var response = await _userService.GetAllUsers();
+            var response = await _userService.GetUsers();
 
             if (response.Success)
             {

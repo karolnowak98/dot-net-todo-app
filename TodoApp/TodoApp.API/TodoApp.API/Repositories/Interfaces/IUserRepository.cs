@@ -5,11 +5,11 @@ namespace TodoApp.API.Repositories.Interfaces
 {
     public interface IUserRepository
     {
-        public Task<IEnumerable<GetUserDto>> GetAllAsync();
-        public Task<GetUserDto?> GetByIdAsync(Guid id);
-        public Task<ApplicationUser?> GetByEmailAsync(string email);
-        public Task<IEnumerable<string>> GetRolesAsync(ApplicationUser user);
-        public Task<ServiceResponse> CreateAsync(RegisterDto registerDto);
-        public Task<bool> CheckPasswordAsync(ApplicationUser user, string password);
+        public Task<IEnumerable<GetUserDto>> GetAll();
+        public Task<GetUserDto?> GetUserById(Guid id);
+        public Task<ApplicationUser?> GetUserByEmail(string email);
+        public Task<IEnumerable<string>> GetRoles(ApplicationUser user);
+        public Task<ServiceResponse> CreateUser(RegisterDto registerDto);
+        public Task<bool> CheckPassword(ApplicationUser user, string password);
     }
 }

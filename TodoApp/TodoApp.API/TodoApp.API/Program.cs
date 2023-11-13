@@ -1,3 +1,4 @@
+using Microsoft.OpenApi.Models;
 using TodoApp.API.Core.Models;
 using TodoApp.API.Repositories.Implementations;
 using TodoApp.API.Services.Implementations;
@@ -7,7 +8,33 @@ var services = builder.Services;
 
 services.AddControllers();
 services.AddEndpointsApiExplorer();
-services.AddSwaggerGen();
+services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Your API", Version = "v1" });
+
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        In = ParameterLocation.Header,
+        Description = "Please enter the JWT with Bearer into field",
+        Name = "Authorization",
+        Type = SecuritySchemeType.ApiKey
+    });
+
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            Array.Empty<string>()
+        }
+    });
+});
 
 services.AddAutoMapper(typeof(Program).Assembly);
 services.AddDbContext<ApplicationDbContext>(options =>
@@ -16,7 +43,9 @@ services.AddDbContext<ApplicationDbContext>(options =>
 });
 
 services.AddScoped<IUserService, UserService>();
+services.AddScoped<ITasksService, TasksService>();
 services.AddScoped<IUserRepository, UserRepository>();
+services.AddScoped<ITasksRepository, TasksRepository>();
 
 builder.Services
     .AddIdentity<ApplicationUser, ApplicationRole>()
@@ -35,7 +64,7 @@ builder.Services.AddAuthentication(options =>
     {
         options.SaveToken = true;
         options.RequireHttpsMetadata = false;
-        options.TokenValidationParameters = new TokenValidationParameters()
+        options.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuer = true,
             ValidateAudience = true,
@@ -56,7 +85,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
 
 app.UseCors(options =>
 {
