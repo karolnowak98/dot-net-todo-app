@@ -15,7 +15,7 @@ export class TasksComponent implements OnInit{
   constructor(private taskService: TasksService) { }
 
   ngOnInit(): void {
-    this.taskService.getUserTasks().subscribe({
+    this.taskService.getTasks().subscribe({
       next: (response: ServiceResponse<GetTaskDto[]>) => {
         if (response && response.success) {
           this.tasks = response.data || [];
@@ -30,5 +30,13 @@ export class TasksComponent implements OnInit{
         // Obsłuż zakończenie (opcjonalne)
       }
     });
+  }
+
+  editTask(task : GetTaskDto) : void{
+
+  }
+
+  addTask(task : GetTaskDto) : void{
+
   }
 }

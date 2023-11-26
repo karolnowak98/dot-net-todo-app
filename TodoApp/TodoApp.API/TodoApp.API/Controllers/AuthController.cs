@@ -7,12 +7,12 @@ namespace TodoApp.API.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private readonly IUserService _userService;
+        private readonly IUsersService _usersService;
         private readonly RoleManager<ApplicationRole> _roleManager;
         
-        public AuthController(IUserService userService, RoleManager<ApplicationRole> roleManager)
+        public AuthController(IUsersService usersService, RoleManager<ApplicationRole> roleManager)
         {
-            _userService = userService;
+            _usersService = usersService;
             _roleManager = roleManager;
         }
 
@@ -35,7 +35,7 @@ namespace TodoApp.API.Controllers
         [HttpPost("register")]
         public async Task<ActionResult<ServiceResponse>> Register([FromBody] RegisterDto userDto)
         {
-            var response = await _userService.Register(userDto);
+            var response = await _usersService.RegisterAsync(userDto);
         
             return response.Success ? Ok(response) : Conflict(response);
         }
@@ -43,7 +43,7 @@ namespace TodoApp.API.Controllers
         [HttpPost("login")]
         public async Task<ActionResult<ServiceResponse<string>>> Login([FromBody] LoginDto loginDto)
         {
-            var response = await _userService.Login(loginDto);
+            var response = await _usersService.LoginAsync(loginDto);
 
             return response.Success ? Ok(response) : Unauthorized(response);
         }

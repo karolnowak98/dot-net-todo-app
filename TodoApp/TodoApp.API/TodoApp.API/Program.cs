@@ -42,10 +42,13 @@ services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("TodoAppConnectionString"));
 });
 
-services.AddScoped<IUserService, UserService>();
-services.AddScoped<ITasksService, TasksService>();
-services.AddScoped<IUserRepository, UserRepository>();
+services.AddScoped<IUsersRepository, UsersRepository>();
 services.AddScoped<ITasksRepository, TasksRepository>();
+services.AddScoped<ICategoryRepository, CategoriesRepository>();
+
+services.AddScoped<IUsersService, UsersService>();
+services.AddScoped<ITasksService, TasksService>();
+services.AddScoped<ICategoriesService, CategoriesService>();
 
 builder.Services
     .AddIdentity<ApplicationUser, ApplicationRole>()

@@ -6,5 +6,4 @@ import { Component } from '@angular/core';
   styleUrls: ['./app-footer.component.css']
 })
 export class AppFooterComponent {
-
 }

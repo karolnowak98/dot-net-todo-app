@@ -3,9 +3,10 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Router } from "@angular/router";
-import { AuthService } from "../../../services/auth.service";
+
 import { CustomValidators } from "../../../shared/utils/custom-validators";
-import {UserRegisterDto} from "../../../shared/interfaces/dtos/user-register-dto.interface";
+import { UserRegisterDto } from "../../../shared/interfaces/dtos/user-register-dto.interface";
+import { AuthService } from "../../../shared/services/auth.service";
 
 @Component({
   selector: 'app-register',

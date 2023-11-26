@@ -10,11 +10,14 @@ import {environment} from "../shared/utils/environment";
   providedIn: 'root'
 })
 export class TasksService {
-  private getUserTasksUrl= environment.httpsUrl + 'tasks/get-tasks';
+
+  private tasksControllerUrl = environment.httpsUrl + 'tasks/';
+  private getUserTasksUrl= this.tasksControllerUrl + 'get-all';
+  private addTaskUrl= this.tasksControllerUrl + 'create-task';
 
   constructor(private http: HttpClient) { }
 
-  getUserTasks(): Observable<ServiceResponse<GetTaskDto[]>> {
+  getTasks(): Observable<ServiceResponse<GetTaskDto[]>> {
     const token = localStorage.getItem('jwtToken');
 
     const headers = new HttpHeaders({

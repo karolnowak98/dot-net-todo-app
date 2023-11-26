@@ -10,7 +10,7 @@
       </div>
 
       <div class="mb-3 form-floating d-flex">
-        <input formControlName="password" type="{{ showPassword ? 'text' : 'password' }}" class="form-control" id="password" placeholder="" required>
+        <input formControlName="password" type="{{ showPassword ? 'text' : 'password' }}" class="form-control" id="password" placeholder="" required autocomplete>
         <label for="password">Password</label>
         <button type="button" class="btn btn-outline-secondary align-items-center d-flex" (click)="togglePasswordVisibility()">
           <i class="bi {{ showPassword ? 'bi-eye-slash' : 'bi-eye' }}"></i>

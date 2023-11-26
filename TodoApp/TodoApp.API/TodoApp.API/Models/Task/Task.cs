@@ -1,3 +1,6 @@
+using TodoApp.API.Models.Task.Enums;
+using TaskStatus = TodoApp.API.Models.Task.Enums.TaskStatus;
+
 namespace TodoApp.API.Models.Task
 {
     public class Task
@@ -7,7 +10,9 @@ namespace TodoApp.API.Models.Task
         public string Title { get; set; }
         public string Description { get; set; }
         public DateTime Deadline { get; set; }
-        public string Priority { get; set; }
-        public string Status { get; set; }
+        [JsonConverter(typeof(JsonStringEnumConverter))]
+        public TaskPriority Priority { get; set; }
+        [JsonConverter(typeof(JsonStringEnumConverter))]
+        public TaskStatus Status { get; set; }
     }
 }

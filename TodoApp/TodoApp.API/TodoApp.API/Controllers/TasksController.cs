@@ -6,29 +6,29 @@ namespace TodoApp.API.Controllers
     [ApiController]
     public class TasksController : ControllerBase
     {
-        private readonly ITasksService _service;
-
         public TasksController(ITasksService service)
         {
             _service = service;
         }
+        
+        private readonly ITasksService _service;
 
         [Authorize(Roles = StaticUserRoles.USER)]
-        [HttpGet("get-tasks")] 
-        public async Task<ActionResult<ServiceResponse<IEnumerable<TaskDto>>>> GetTasksForUser()
+        [HttpGet("get-all")] 
+        public async Task<ActionResult<ServiceResponse<IEnumerable<TaskDto>>>> GetAll()
         {
             var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier) ?? string.Empty);
-            var response = await _service.GetTasks(userId);
+            var response = await _service.GetTasksForUserAsync(userId);
 
             return response.Success ? Ok(response) : BadRequest(response);
         }
         
         [Authorize(Roles = StaticUserRoles.USER)]
-        [HttpPost("add-task")]
-        public async Task<IActionResult> AddTask([FromBody] TaskDto taskDto)
+        [HttpPost("create-task")]
+        public async Task<IActionResult> CreateTask([FromBody] TaskDto taskDto)
         {
             var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier) ?? string.Empty);
-            var response = await _service.AddTask(userId, taskDto);
+            var response = await _service.CreateTaskAsync(userId, taskDto);
 
             return response.Success ? Ok(response) : BadRequest(response);
         }

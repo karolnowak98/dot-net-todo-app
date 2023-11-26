@@ -1,9 +1,6 @@
 using TodoApp.API.Core.Models;
 using TodoApp.API.Models.Category;
-using TodoApp.API.Models.Comment;
-using TodoApp.API.Models.Note;
 using TodoApp.API.Models.TaskCategory;
-using TodoApp.API.Models.User;
 using Task = TodoApp.API.Models.Task.Task;
 
 namespace TodoApp.API.Core.Data
@@ -17,13 +14,12 @@ namespace TodoApp.API.Core.Data
             base.OnModelCreating(builder);
             
             builder.Entity<TaskCategory>().HasNoKey();
+            
+            builder.Entity<Category>().Property(e => e.Type).HasConversion<int>();
         }
         
-        //public new DbSet<User> Users { get; set; }
         public DbSet<Task> Tasks { get; set; }
         public DbSet<Category> Categories { get; set; }
-        public DbSet<Comment> Comments { get; set; }
-        public DbSet<Note> Notes { get; set; }
         public DbSet<TaskCategory> TaskCategories { get; set; }
     }
 }

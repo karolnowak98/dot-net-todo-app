@@ -5,7 +5,7 @@ import { catchError } from "rxjs/operators";
 import { of } from "rxjs";
 
 import { UserLoginDto } from "../../../shared/interfaces/dtos/user-login-dto.interface";
-import { AuthService } from "../../../services/auth.service";
+import { AuthService } from "../../../shared/services/auth.service";
 
 @Component({
   selector: 'app-login',
@@ -39,7 +39,13 @@ export class LoginComponent {
     this.userLoginDto = { ...this.form.value };
     this.authService.login(this.userLoginDto).pipe(
       catchError((errorResponse) => {
-        alert(errorResponse.error.message);
+        if(errorResponse.error instanceof ErrorEvent) {
+          alert(errorResponse.error.message);
+        } else {
+          if(errorResponse.status === 0){
+            alert("Api doesn't respond!");
+          }
+        }
         return of(null);
       })
     ).subscribe({

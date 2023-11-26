@@ -1,33 +1,34 @@
-using TodoApp.API.Models.Task;
+using TodoApp.API.Models.TaskCategory;
 using Task = TodoApp.API.Models.Task.Task;
 
 namespace TodoApp.API.Repositories.Implementations
 {
     public class TasksRepository : ITasksRepository
     {
-        private readonly ApplicationDbContext _context;
-        private readonly IMapper _mapper;
-
-        public TasksRepository(ApplicationDbContext context, IMapper mapper)
+        public TasksRepository(ApplicationDbContext context)
         {
             _context = context;
-            _mapper = mapper;
-        }
-
-        public async Task<IEnumerable<TaskDto>> GetTasks(Guid userId)
-        {
-            var tasks = await _context.Tasks.Where(t => t.UserId == userId).ToListAsync();
-            return _mapper.Map<IEnumerable<TaskDto>>(tasks);
         }
         
-        public async Task<bool> AddTask(Guid userId, TaskDto taskDto)
-        {
-            var task = _mapper.Map<Task>(taskDto);
-            task.UserId = userId;
-            await _context.Tasks.AddAsync(task);
-    
-            var changes = await _context.SaveChangesAsync();
+        private readonly ApplicationDbContext _context;
 
+        public async Task<IEnumerable<Task>> GetAllAsync(Guid userId)
+        {
+            return await _context.Tasks.Where(c => c.UserId == userId).ToListAsync();
+        }
+        
+        public async Task<bool> CreateTaskAsync(Task task)
+        {
+            await _context.Tasks.AddAsync(task);
+            var changes = await _context.SaveChangesAsync();
+            return changes > 0;
+        }
+
+        public async Task<bool> CreateTaskCategoryAsync(Guid taskId, Guid categoryId)
+        {
+            var taskCategory = new TaskCategory { TaskId = taskId, CategoryId = categoryId };
+            await _context.TaskCategories.AddAsync(taskCategory);
+            var changes = await _context.SaveChangesAsync();
             return changes > 0;
         }
     }

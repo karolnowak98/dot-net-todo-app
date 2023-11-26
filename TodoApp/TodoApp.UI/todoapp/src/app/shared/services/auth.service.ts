@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import {Observable, tap} from 'rxjs';
+import { Observable, tap } from 'rxjs';
 
-import { ServiceResponse } from '../shared/interfaces/service-response.interface';
-import { UserLoginDto } from '../shared/interfaces/dtos/user-login-dto.interface';
-import { UserRegisterDto } from '../shared/interfaces/dtos/user-register-dto.interface';
-import {environment} from "../shared/utils/environment";
+import { UserLoginDto } from "../interfaces/dtos/user-login-dto.interface";
+import { ServiceResponse } from "../interfaces/service-response.interface";
+import { environment } from "../utils/environment";
+import { UserRegisterDto } from "../interfaces/dtos/user-register-dto.interface";
 
 @Injectable({
   providedIn: 'root'
@@ -38,6 +38,7 @@ export class AuthService {
 
   logout() {
     localStorage.removeItem(this.tokenKey);
+    this.router.navigateByUrl('/');
   }
 
   getToken(): string | null {

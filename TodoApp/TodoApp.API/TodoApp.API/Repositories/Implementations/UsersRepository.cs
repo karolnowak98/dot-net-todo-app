@@ -3,37 +3,44 @@ using TodoApp.API.Models.User.Dto;
 
 namespace TodoApp.API.Repositories.Implementations
 {
-    public class UserRepository : IUserRepository
+    public class UsersRepository : IUsersRepository
     {
-        private readonly UserManager<ApplicationUser> _manager;
-        private readonly ApplicationDbContext _context;
-        private readonly IMapper _mapper;
-        
-        public UserRepository(UserManager<ApplicationUser> manager, ApplicationDbContext context, IMapper mapper)
+        public UsersRepository(UserManager<ApplicationUser> manager, ApplicationDbContext context, IMapper mapper)
         {
             _manager = manager;
             _context = context;
             _mapper = mapper;
         }
+        
+        private readonly UserManager<ApplicationUser> _manager;
+        private readonly ApplicationDbContext _context;
+        private readonly IMapper _mapper;
 
-        public async Task<IEnumerable<GetUserDto>> GetAll()
+        public async Task<IEnumerable<GetUserDto>> GetAllAsync()
         {
             var users = await _context.Users.ToListAsync();
 
             return users.Select(u => _mapper.Map<GetUserDto>(u));
         }
 
-        public async Task<GetUserDto?> GetUserById(Guid id)
+        public async Task<GetUserDto?> GetByIdAsync(Guid id)
         {
             var user = await _context.Users.FindAsync(id);
 
             return _mapper.Map<GetUserDto>(user);
         }
 
-        public async Task<ApplicationUser?> GetUserByEmail(string email) => await _manager.Users.FirstOrDefaultAsync(u => u.Email == email);
-        public async Task<IEnumerable<string>> GetRoles(ApplicationUser user) => await _manager.GetRolesAsync(user);
+        public async Task<ApplicationUser?> GetByEmailAsync(string email)
+        {
+            return await _manager.Users.FirstOrDefaultAsync(u => u.Email == email);
+        }
 
-        public async Task<ServiceResponse> CreateUser(RegisterDto registerDto)
+        public async Task<IEnumerable<string>> GetRolesAsync(ApplicationUser user)
+        {
+            return await _manager.GetRolesAsync(user);
+        }
+
+        public async Task<ServiceResponse> CreateUserAsync(RegisterDto registerDto)
         {
             var user = _mapper.Map<ApplicationUser>(registerDto);
             user.SecurityStamp = Guid.NewGuid().ToString();
@@ -57,7 +64,7 @@ namespace TodoApp.API.Repositories.Implementations
             return new ServiceResponse();
         }
 
-        public async Task<bool> CheckPassword(ApplicationUser user, string password)
+        public async Task<bool> CheckPasswordAsync(ApplicationUser user, string password)
         {
             return await _manager.CheckPasswordAsync(user, password);
         }

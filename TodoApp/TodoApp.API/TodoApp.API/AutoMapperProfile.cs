@@ -1,4 +1,5 @@
 using TodoApp.API.Core.Models;
+using TodoApp.API.Models.Category;
 using TodoApp.API.Models.Task;
 using TodoApp.API.Models.User.Dto;
 using Task = TodoApp.API.Models.Task.Task;
@@ -12,8 +13,12 @@ namespace TodoApp.API
             CreateMap<ApplicationUser, GetUserDto>();
             CreateMap<GetUserDto, ApplicationUser>();
             CreateMap<RegisterDto, ApplicationUser>();
+            
             CreateMap<Task, TaskDto>();
             CreateMap<TaskDto, Task>();
+            
+            CreateMap<CategoryDto, Category>();
+            CreateMap<Category, CategoryDto>();
         }
     }
 }
