@@ -1,7 +1,10 @@
 # dot-net-todo-app
-Simple to do app
+**Description:** It's todo web application with authorization.
 
-Languages: C#, Typescript, HTML5, CSS
-Frontend: Angular 16
-Backend: .NET 7
-Database: SQL server
+**Programming lnguages:** C#, Typescript, HTML, CSS
+
+**Frontend framework:** Angular 16
+
+**Backend framework:** Asp .NET
+
+**Database:** SQL server
