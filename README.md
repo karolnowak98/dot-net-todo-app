@@ -1,11 +1,11 @@
 # dot-net-todo-app
 **Description:** It's todo web application with authorization.
 
-**Programming lnguages:** C#, Typescript, HTML, CSS
+**Programming languages:** C#, Typescript, HTML5, CSS3
 
-**Frontend framework:** Angular 16
+**Frontend:** Angular 16, Bootstrap, Fontawesome
 
-**Backend framework:** Asp .NET
+**Backend:** Asp .NET, Entity Framework
 
 **Database:** SQL server
 
