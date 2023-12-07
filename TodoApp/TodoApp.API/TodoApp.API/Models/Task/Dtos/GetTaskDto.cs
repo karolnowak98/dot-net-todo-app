@@ -4,8 +4,9 @@ using TaskStatus = TodoApp.API.Models.Task.Enums.TaskStatus;
 
 namespace TodoApp.API.Models.Task
 {
-    public class TaskDto
+    public class GetTaskDto
     {
+        public Guid Id { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
         public DateTime Deadline { get; set; }

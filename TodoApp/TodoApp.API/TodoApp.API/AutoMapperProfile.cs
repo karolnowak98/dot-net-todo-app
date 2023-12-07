@@ -14,8 +14,8 @@ namespace TodoApp.API
             CreateMap<GetUserDto, ApplicationUser>();
             CreateMap<RegisterDto, ApplicationUser>();
             
-            CreateMap<Task, TaskDto>();
-            CreateMap<TaskDto, Task>();
+            CreateMap<Task, GetTaskDto>();
+            CreateMap<GetTaskDto, Task>();
             
             CreateMap<CategoryDto, Category>();
             CreateMap<Category, CategoryDto>();

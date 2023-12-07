@@ -21,8 +21,8 @@ export class AuthService {
 
   constructor(private http: HttpClient, private router: Router) {}
 
-  login(values: UserLoginDto): Observable<ServiceResponse<any>> {
-    return this.http.post<ServiceResponse<any>>(environment.httpsUrl + this.apiEndpoints.login, values)
+  login(loginDto: UserLoginDto): Observable<ServiceResponse<any>> {
+    return this.http.post<ServiceResponse<any>>(environment.httpsUrl + this.apiEndpoints.login, loginDto)
       .pipe(
         tap(response => {
           if (response.success && response.data) {
@@ -32,8 +32,8 @@ export class AuthService {
       );
   }
 
-  register(values: UserRegisterDto): Observable<ServiceResponse<any>> {
-    return this.http.post<ServiceResponse<any>>(environment.httpsUrl + this.apiEndpoints.register, values);
+  register(registerDto: UserRegisterDto): Observable<ServiceResponse<any>> {
+    return this.http.post<ServiceResponse<any>>(environment.httpsUrl + this.apiEndpoints.register, registerDto);
   }
 
   logout() {

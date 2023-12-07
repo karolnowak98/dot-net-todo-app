@@ -5,39 +5,50 @@ namespace TodoApp.API.Services.Implementations
 {
     public class TasksService : ITasksService
     {
-        public TasksService(IMapper mapper, ITasksRepository repository, ICategoryRepository categoryRepository)
+        public TasksService(IMapper mapper, ITasksRepository tasksRepo, ICategoryRepository categoryRepo)
         {
             _mapper = mapper;
-            _repository = repository;
-            _categoryRepository = categoryRepository;
+            _tasksRepo = tasksRepo;
+            _categoryRepo = categoryRepo;
         }
         
         private readonly IMapper _mapper;
-        private readonly ITasksRepository _repository;
-        private readonly ICategoryRepository _categoryRepository;
+        private readonly ITasksRepository _tasksRepo;
+        private readonly ICategoryRepository _categoryRepo;
         
-        public async Task<ServiceResponse<IEnumerable<TaskDto>>> GetTasksForUserAsync(Guid userId)
+        public async Task<ServiceResponse<IEnumerable<GetTaskDto>>> GetTasksForUserAsync(Guid userId)
         {
-            var tasks = await _repository.GetAllAsync(userId);
-            var taskDtos = new List<TaskDto>();
+            var tasks = await _tasksRepo.GetAllAsync(userId);
+            var taskDtos = new List<GetTaskDto>();
 
             foreach (var task in tasks)
             {
-                var taskDto = _mapper.Map<TaskDto>(task);
-                taskDto.Categories = _categoryRepository.GetAllForTaskAsync(task.Id).Result;
+                var taskDto = _mapper.Map<GetTaskDto>(task);
+                taskDto.Categories = await _categoryRepo.GetAllForTaskAsync(task.Id);
                 taskDtos.Add(taskDto);
             }
 
-            return new ServiceResponse<IEnumerable<TaskDto>> { Data = taskDtos };
+            return new ServiceResponse<IEnumerable<GetTaskDto>> { Data = taskDtos };
+        }
+
+        private async Task<GetTaskDto> GetTaskByIdAsync(Guid taskId)
+        {
+            var task = await _tasksRepo.GetByIdAsync(taskId);
+            var getTaskDto = _mapper.Map<GetTaskDto>(task);
+            
+            getTaskDto.Categories = await _categoryRepo.GetAllForTaskAsync(taskId);
+
+            return getTaskDto;
         }
         
-        public async Task<ServiceResponse> CreateTaskAsync(Guid userId, TaskDto taskDto)
+        public async Task<ServiceResponse> CreateTaskAsync(Guid userId, GetTaskDto getTaskDto)
         {
-            var task = _mapper.Map<Task>(taskDto);
+            var task = _mapper.Map<Task>(getTaskDto);
+            
             task.Id = Guid.NewGuid();
             task.UserId = userId;
             
-            if (!await _repository.CreateTaskAsync(task))
+            if (!await _tasksRepo.CreateTaskAsync(task))
             {
                 return new ServiceResponse
                 {
@@ -46,16 +57,16 @@ namespace TodoApp.API.Services.Implementations
                 };
             }
 
-            foreach (var category in taskDto.Categories)
+            foreach (var category in getTaskDto.Categories)
             {
-                var categoryId = await _categoryRepository.GetIdByTypeAsync(category.Type);
+                var categoryId = await _categoryRepo.GetIdByTypeAsync(category.Type);
 
                 if (categoryId == null)
                 {
                     continue;
                 }
                 
-                if (!await _repository.CreateTaskCategoryAsync(task.Id, categoryId.Value))
+                if (!await _tasksRepo.CreateTaskCategoryAsync(task.Id, categoryId.Value))
                 {
                     return new ServiceResponse
                     {
@@ -65,6 +76,22 @@ namespace TodoApp.API.Services.Implementations
                 }
             }
                 
+            return new ServiceResponse();
+        }
+
+        public async Task<ServiceResponse> UpdateTaskStatusAsync(Guid userId, UpdateStatusTaskDto updateStatusTaskDto)
+        {
+            var result = await _tasksRepo.UpdateTaskStatusAsync(userId, updateStatusTaskDto);
+
+            if (!result)
+            {
+                return new ServiceResponse()
+                {
+                    Success = false,
+                    Message = "Couldn't update status!"
+                };
+            }
+            
             return new ServiceResponse();
         }
     }

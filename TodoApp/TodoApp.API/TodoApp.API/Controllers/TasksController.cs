@@ -15,7 +15,7 @@ namespace TodoApp.API.Controllers
 
         [Authorize(Roles = StaticUserRoles.USER)]
         [HttpGet("get-all")] 
-        public async Task<ActionResult<ServiceResponse<IEnumerable<TaskDto>>>> GetAll()
+        public async Task<ActionResult<ServiceResponse<IEnumerable<GetTaskDto>>>> GetAll()
         {
             var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier) ?? string.Empty);
             var response = await _service.GetTasksForUserAsync(userId);
@@ -25,10 +25,20 @@ namespace TodoApp.API.Controllers
         
         [Authorize(Roles = StaticUserRoles.USER)]
         [HttpPost("create-task")]
-        public async Task<IActionResult> CreateTask([FromBody] TaskDto taskDto)
+        public async Task<IActionResult> CreateTask([FromBody] GetTaskDto getTaskDto)
         {
             var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier) ?? string.Empty);
-            var response = await _service.CreateTaskAsync(userId, taskDto);
+            var response = await _service.CreateTaskAsync(userId, getTaskDto);
+
+            return response.Success ? Ok(response) : BadRequest(response);
+        }
+        
+        [Authorize(Roles = StaticUserRoles.USER)]
+        [HttpPut("update-task-status")]
+        public async Task<ActionResult<ServiceResponse<bool>>> UpdateTaskStatus([FromBody] UpdateStatusTaskDto updateStatusTaskDto)
+        {
+            var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier) ?? string.Empty);
+            var response = await _service.UpdateTaskStatusAsync(userId, updateStatusTaskDto);
 
             return response.Success ? Ok(response) : BadRequest(response);
         }
