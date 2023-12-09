@@ -5,9 +5,11 @@
 
 **Frontend:** Angular 16, Bootstrap, Fontawesome
 
-**Backend:** Asp .NET, Entity Framework
+**Backend:** Asp.NET 7, Entity Framework
 
-**Database:** SQL server
+**Architecture:** Basic MVC with api controllers and entity framework for db
+
+**Database:** MS SQL
 
 <p align="center"> (login) </p>
 
