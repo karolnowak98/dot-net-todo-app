@@ -1,13 +1,15 @@
 # dot-net-todo-app
-**Description:** It's todo web application with authorization.
+**Description:** It's todo web application with authorization. User can create tasks to do and manage his tasks.
 
 **Programming languages:** C#, Typescript, HTML5, CSS3
 
-**Frontend:** Angular 16, Bootstrap, Fontawesome
+**Frontend:** Angular 17, Bootstrap, Fontawesome
 
-**Backend:** Asp.NET 7, Entity Framework
+**Backend:** Asp.NET 8, Entity Framework
 
-**Architecture:** Basic MVC with api controllers and entity framework for db
+**Patterns:** 
+
+**Architecture:** Modular monolith
 
 **Database:** MS SQL
 
