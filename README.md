@@ -7,8 +7,6 @@
 
 **Backend:** Asp.NET 8, Entity Framework
 
-**Patterns:** 
-
 **Architecture:** Modular monolith
 
 **Database:** MS SQL
