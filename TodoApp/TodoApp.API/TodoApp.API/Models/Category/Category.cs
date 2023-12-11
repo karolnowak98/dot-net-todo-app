@@ -1,11 +1,8 @@
-using TodoApp.API.Models.Category.Enums;
+namespace TodoApp.API.Models.Category;
 
-namespace TodoApp.API.Models.Category
+public class Category
 {
-    public class Category
-    {
-        public Guid Id { get; set; }
-        [JsonConverter(typeof(JsonStringEnumConverter))]
-        public CategoryType Type { get; set; }
-    }
+    public Guid Id { get; set; }
+    [JsonConverter(typeof(JsonStringEnumConverter))]
+    public CategoryType Type { get; set; }
 }
