@@ -1,0 +1,6 @@
+@GlassyCode.ToDo.Bootstrapper_HostAddress = http://localhost:5099
+
+GET {{GlassyCode.ToDo.Bootstrapper_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

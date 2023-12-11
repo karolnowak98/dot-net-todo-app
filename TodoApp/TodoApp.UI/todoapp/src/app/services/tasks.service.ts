@@ -15,25 +15,27 @@ export class TasksService {
   private tasksControllerUrl = environment.httpsUrl + 'tasks/';
   private getUserTasksUrl= this.tasksControllerUrl + 'get-all';
   private addTaskUrl= this.tasksControllerUrl + 'create-task';
+  private editTaskUrl= this.tasksControllerUrl + 'edit-task';
   private updateTaskStatusUrl= this.tasksControllerUrl + 'update-task-status';
 
   constructor(private http: HttpClient) { }
 
-  getTasks(): Observable<ServiceResponse<GetTaskDto[]>> {
+  private getJwtHeaders(): HttpHeaders {
     const token = localStorage.getItem('jwtToken');
-    const headers = new HttpHeaders({
+    return new HttpHeaders({
       Authorization: `Bearer ${token}`
     });
+  }
 
-    return this.http.get<ServiceResponse<GetTaskDto[]>>(this.getUserTasksUrl, { headers });
+  getTasks(): Observable<ServiceResponse<GetTaskDto[]>> {
+    return this.http.get<ServiceResponse<GetTaskDto[]>>(this.getUserTasksUrl, { headers: this.getJwtHeaders() });
   }
 
   updateTaskStatus(updateStatusTaskDto: UpdateStatusTaskDto): Observable<ServiceResponse<any>> {
-    const token = localStorage.getItem('jwtToken');
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`
-    });
+    return this.http.put<ServiceResponse<any>>(this.updateTaskStatusUrl, updateStatusTaskDto, { headers: this.getJwtHeaders() });
+  }
 
-    return this.http.put<ServiceResponse<any>>(this.updateTaskStatusUrl, updateStatusTaskDto, { headers });
+  editTask(taskDto: GetTaskDto): Observable<ServiceResponse<GetTaskDto>> {
+    return this.http.post<ServiceResponse<GetTaskDto>>(this.editTaskUrl, taskDto, { headers: this.getJwtHeaders() });
   }
 }

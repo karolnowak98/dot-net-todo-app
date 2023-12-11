@@ -1,12 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 
-import { UpdateStatusTaskDto } from "../../shared/interfaces/dtos/tasks/update-status-task-dto.interface";
-import { GetTaskDto } from "../../shared/interfaces/dtos/tasks/get-task-dto.interface";
-import { ServiceResponse} from "../../shared/interfaces/service-response.interface";
-import { TasksService } from "../../services/tasks.service";
-import { TaskStatus } from "../../shared/enums/task-status.enum";
-import { catchError, switchMap } from "rxjs/operators";
-import { of } from "rxjs";
+import {UpdateStatusTaskDto} from "../../shared/interfaces/dtos/tasks/update-status-task-dto.interface";
+import {GetTaskDto} from "../../shared/interfaces/dtos/tasks/get-task-dto.interface";
+import {ServiceResponse} from "../../shared/interfaces/service-response.interface";
+import {TasksService} from "../../services/tasks.service";
+import {TaskStatus} from "../../shared/enums/task-status.enum";
 
 @Component({
   selector: 'app-tasks',
@@ -15,8 +13,6 @@ import { of } from "rxjs";
 })
 export class TasksComponent implements OnInit{
   tasks: GetTaskDto[] = [];
-
-  isUpdatingStatus = false;
 
   constructor(private taskService: TasksService) { }
 
@@ -47,39 +43,30 @@ export class TasksComponent implements OnInit{
 
   }
 
-  toggleTaskStatus(id: string, status: TaskStatus): void {
+  toggleTaskStatus(id: string, newStatus: TaskStatus): void {
 
-    if(this.isUpdatingStatus){
-      return;
-    }
+    const updateTaskDto: UpdateStatusTaskDto = {
+      id: id,
+      status: newStatus === TaskStatus.Completed ? TaskStatus.NotCompleted : TaskStatus.Completed
+    };
 
-    const taskIndex = this.tasks.findIndex(task => task.id === id);
-    if (taskIndex !== -1) {
-      this.tasks[taskIndex].status = status === TaskStatus.Completed ? TaskStatus.NotCompleted : TaskStatus.Completed;
-      this.isUpdatingStatus = true;
-
-      const updateTaskDto: UpdateStatusTaskDto = {
-        id: id,
-        status: this.tasks[taskIndex].status
-      };
-
-      this.taskService.updateTaskStatus(updateTaskDto).pipe(
-        catchError((errorResponse) => {
-          console.log(errorResponse.error);
-          this.tasks[taskIndex].status = status;
-          return of(null);
-        }),
-        switchMap(() => {
-          this.isUpdatingStatus = false;
-          return of(null);
-        })
-      ).subscribe({
-        next: (response) => {
-          if (response && response) {
-            console.log("Success");
-          }
+    this.taskService.updateTaskStatus(updateTaskDto).subscribe({
+      next: (response) => {
+        if (response && response) {
+          console.log("Success");
+          this.updateTaskStatusInList(id, updateTaskDto.status);
         }
-      });
+      }
+    });
+  }
+
+  updateTaskStatusInList(taskId: string, newStatus: TaskStatus): void {
+    const taskIndex = this.tasks.findIndex(task => task.id === taskId);
+
+    if (taskIndex !== -1) {
+      this.tasks[taskIndex].status = newStatus;
     }
   }
+
+  protected readonly TaskStatus = TaskStatus;
 }

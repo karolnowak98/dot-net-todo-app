@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <RootNamespace>GlassyCode.ToDo.Bootstrapper</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <None Remove="Properties\launchSettings.json" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\GlassyCode.ToDo.Shared.Abstractions\GlassyCode.ToDo.Shared.Abstractions.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\GlassyCode.ToDo.Shared.Abstractions\GlassyCode.ToDo.Shared.Abstractions.csproj" />
+    </ItemGroup>
+
+</Project>
