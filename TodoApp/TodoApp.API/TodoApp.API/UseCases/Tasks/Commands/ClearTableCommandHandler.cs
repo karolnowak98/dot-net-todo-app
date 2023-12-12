@@ -1,8 +1,9 @@
 using MediatR;
+using TodoApp.API.Interfaces;
 
 namespace TodoApp.API.UseCases.Tasks.Commands;
 
-internal class ClearTableCommandHandler(ApplicationDbContext dbContext)
+internal class ClearTableCommandHandler(IApplicationDbContext dbContext)
     : IRequestHandler<ClearTableCommand, bool>
 {
     public async Task<bool> Handle(ClearTableCommand request, CancellationToken ct)

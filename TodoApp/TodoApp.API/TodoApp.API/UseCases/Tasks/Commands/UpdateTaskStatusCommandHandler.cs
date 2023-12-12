@@ -3,7 +3,7 @@ using TodoApp.API.Interfaces;
 
 namespace TodoApp.API.UseCases.Tasks.Commands;
 
-internal class UpdateTaskStatusCommandHandler(ApplicationDbContext dbContext, 
+internal class UpdateTaskStatusCommandHandler(IApplicationDbContext dbContext, 
     ITasksRepository repo) : IRequestHandler<UpdateTaskStatusCommand, bool>
 {
     public async Task<bool> Handle(UpdateTaskStatusCommand request, CancellationToken ct)

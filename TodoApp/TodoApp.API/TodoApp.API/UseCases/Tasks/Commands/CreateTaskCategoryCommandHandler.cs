@@ -1,9 +1,10 @@
 using MediatR;
+using TodoApp.API.Interfaces;
 using TodoApp.API.Models.TaskCategory;
 
 namespace TodoApp.API.UseCases.Tasks.Commands;
 
-internal class CreateTaskCategoryCommandHandler(ApplicationDbContext dbContext) : IRequestHandler<CreateTaskCategoryCommand, bool>
+internal class CreateTaskCategoryCommandHandler(IApplicationDbContext dbContext) : IRequestHandler<CreateTaskCategoryCommand, bool>
 {
     public async Task<bool> Handle(CreateTaskCategoryCommand request, CancellationToken ct)
     {

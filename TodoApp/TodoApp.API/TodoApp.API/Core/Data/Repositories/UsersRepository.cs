@@ -8,7 +8,7 @@ using TodoApp.API.UseCases.Users.Queries;
 
 namespace TodoApp.API.Core.Data.Repositories;
 
-public class UsersRepository(IMediator mediator) : IUsersRepository
+public class UsersRepository(ISender mediator) : IUsersRepository
 {
     public async Task<ApplicationUser?> GetByEmailAsync(string email)
         => await mediator.Send(new GetByEmailQuery(email));
@@ -26,5 +26,5 @@ public class UsersRepository(IMediator mediator) : IUsersRepository
         => await mediator.Send(new GetByIdQuery(userId));
 
     public async Task<ServiceResponse> CreateUserAsync(RegisterDto registerDto)
-        => await mediator.Send(new CreateUserCommand { RegisterDto = registerDto });
+        => await mediator.Send(new CreateUserCommand(registerDto));
 }

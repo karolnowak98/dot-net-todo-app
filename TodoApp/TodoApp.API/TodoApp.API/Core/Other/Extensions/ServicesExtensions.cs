@@ -78,7 +78,8 @@ public static class ServicesExtensions
     {
         services
             .AddIdentity<ApplicationUser, ApplicationRole>()
-            .AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
+            .AddEntityFrameworkStores<ApplicationDbContext>()
+            .AddDefaultTokenProviders();
 
         services.Configure<IdentityOptions>(options => { options.Password.RequiredLength = 10; });
     }
@@ -89,6 +90,8 @@ public static class ServicesExtensions
         {
             options.UseSqlServer(configuration.GetConnectionString("TodoAppConnectionString"));
         });
+
+        services.AddScoped<IApplicationDbContext>();
     }
 
     public static void ConfigureMediatR(this IServiceCollection services)

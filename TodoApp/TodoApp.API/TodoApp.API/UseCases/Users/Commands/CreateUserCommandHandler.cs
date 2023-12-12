@@ -4,7 +4,7 @@ using TodoApp.API.DTOs;
 
 namespace TodoApp.API.UseCases.Users.Commands;
 
-public class CreateUserCommandHandler(UserManager<ApplicationUser> userManager, IMapper mapper)
+internal class CreateUserCommandHandler(UserManager<ApplicationUser> userManager, IMapper mapper)
     : IRequestHandler<CreateUserCommand, ServiceResponse>
 {
     public async Task<ServiceResponse> Handle(CreateUserCommand request, CancellationToken ct)
@@ -27,7 +27,7 @@ public class CreateUserCommandHandler(UserManager<ApplicationUser> userManager, 
             };
         }
 
-        await userManager.AddToRoleAsync(user, StaticUserRoles.USER);
+        await userManager.AddToRoleAsync(user, StaticUserRoles.User);
 
         return new ServiceResponse();
     } 

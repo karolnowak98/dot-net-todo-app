@@ -1,9 +1,10 @@
 using MediatR;
+using TodoApp.API.Interfaces;
 using Task = TodoApp.API.Models.Task.Task;
 
 namespace TodoApp.API.UseCases.Tasks.Queries;
 
-internal class GetAllTasksForUserQueryHandler(ApplicationDbContext dbContext)
+internal class GetAllTasksForUserQueryHandler(IApplicationDbContext dbContext)
     : IRequestHandler<GetAllTasksForUserQuery, IEnumerable<Task>>
 {
     
