@@ -4,7 +4,7 @@ using TodoApp.API.DTOs.Users;
 using TodoApp.API.Models.Category;
 using Task = TodoApp.API.Models.Task.Task;
 
-namespace TodoApp.API;
+namespace TodoApp.API.Core.Other;
 
 public class AutoMapperProfile : Profile
 {

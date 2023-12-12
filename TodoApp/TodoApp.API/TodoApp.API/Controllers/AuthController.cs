@@ -36,7 +36,7 @@ public class AuthController(IAuthService authService,
         
         return response.Success ? Ok(response) : Conflict(response);
     }
-
+    [ProducesDefaultResponseType]
     [HttpPost("login")]
     [ProducesResponseType(typeof(ServiceResponse<string>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ServiceResponse<string>), StatusCodes.Status401Unauthorized)]
