@@ -26,5 +26,9 @@
     <ItemGroup>
       <Folder Include="UseCases\Users\" />
     </ItemGroup>
+    
+    <ItemGroup>
+        <InternalsVisibleTo Include="TodoApp.API.IntegrationTests" />
+    </ItemGroup>
 
 </Project>

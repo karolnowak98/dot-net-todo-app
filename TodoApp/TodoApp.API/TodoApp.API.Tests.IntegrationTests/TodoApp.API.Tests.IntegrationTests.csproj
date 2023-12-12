@@ -6,4 +6,25 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="8.0.0" />
+      <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
+      <PackageReference Include="Microsoft.TestPlatform.TestHost" Version="17.8.0" />
+      <PackageReference Include="xunit" Version="2.6.3" />
+      <PackageReference Include="xunit.assert" Version="2.6.3" />
+      <PackageReference Include="xunit.extensibility.core" Version="2.6.3" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\TodoApp.API\TodoApp.API.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\TodoApp.API\TodoApp.API.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <InternalsVisibleTo Include="TodoApp.API.Tests.IntegrationTests" />
+    </ItemGroup>
+
 </Project>
