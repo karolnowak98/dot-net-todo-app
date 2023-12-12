@@ -1,6 +1,5 @@
 using TodoApp.API.DTOs;
 using TodoApp.API.DTOs.Users;
-using TodoApp.API.Exceptions.Jwt;
 using TodoApp.API.Interfaces;
 
 namespace TodoApp.API.Services;
