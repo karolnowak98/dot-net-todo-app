@@ -1,5 +1,5 @@
 # dot-net-todo-app
-**Description:** It's todo web application with authorization. User can create tasks to do and manage his tasks.
+**Description:** It's todo web application with authorization. User can create to do items and manage them. 
 
 **Programming languages:** C#, Typescript, HTML5, CSS3
 
