@@ -19,7 +19,7 @@ public static class ServicesExtensions
         services.AddScoped<ICategoriesService, CategoriesService>();
     }
 
-    public static void AddSwagger(this IServiceCollection services)
+    public static void ConfigureSwagger(this IServiceCollection services)
     {
         services.AddSwaggerGen(c =>
         {
@@ -50,7 +50,7 @@ public static class ServicesExtensions
         });
     }
 
-    public static void AddJwtAuthentication(this IServiceCollection services, IConfiguration configuration)
+    public static void ConfigureJwtAuthentication(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddAuthentication(options =>
             {
@@ -74,20 +74,29 @@ public static class ServicesExtensions
             });
     }
 
-    public static void AddIdentity(this IServiceCollection services)
+    public static void ConfigureIdentity(this IServiceCollection services)
     {
         services
             .AddIdentity<ApplicationUser, ApplicationRole>()
-            .AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
+            .AddEntityFrameworkStores<ApplicationDbContext>()
+            .AddDefaultTokenProviders();
 
         services.Configure<IdentityOptions>(options => { options.Password.RequiredLength = 10; });
     }
 
-    public static void AddSqlDbContext(this IServiceCollection services, IConfiguration configuration)
+    public static void ConfigureSqlDbContext(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddDbContext<ApplicationDbContext>(options =>
         {
             options.UseSqlServer(configuration.GetConnectionString("TodoAppConnectionString"));
         });
+
+        services.AddScoped<IApplicationDbContext>();
+    }
+
+    public static void ConfigureMediatR(this IServiceCollection services)
+    {
+        var config = new MediatRServiceConfiguration();
+        services.AddMediatR(config);
     }
 }

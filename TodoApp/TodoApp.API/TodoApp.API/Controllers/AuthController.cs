@@ -14,15 +14,15 @@ public class AuthController(IAuthService authService,
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<IActionResult> SeedRoles()
     {
-        var isOwnerRoleExists = await roleManager.RoleExistsAsync(StaticUserRoles.OWNER);
-        var isAdminRoleExists = await roleManager.RoleExistsAsync(StaticUserRoles.ADMIN);
-        var isUserRoleExists = await roleManager.RoleExistsAsync(StaticUserRoles.USER);
+        var isOwnerRoleExists = await roleManager.RoleExistsAsync(StaticUserRoles.Owner);
+        var isAdminRoleExists = await roleManager.RoleExistsAsync(StaticUserRoles.Admin);
+        var isUserRoleExists = await roleManager.RoleExistsAsync(StaticUserRoles.User);
 
         if (isOwnerRoleExists && isAdminRoleExists && isUserRoleExists) return Ok("Roles seeding is already done!");
             
-        await roleManager.CreateAsync(new ApplicationRole { Name = StaticUserRoles.USER });
-        await roleManager.CreateAsync(new ApplicationRole { Name = StaticUserRoles.ADMIN });
-        await roleManager.CreateAsync(new ApplicationRole { Name = StaticUserRoles.OWNER });
+        await roleManager.CreateAsync(new ApplicationRole { Name = StaticUserRoles.User });
+        await roleManager.CreateAsync(new ApplicationRole { Name = StaticUserRoles.Admin });
+        await roleManager.CreateAsync(new ApplicationRole { Name = StaticUserRoles.Owner });
 
         return Ok("Role seeding done successfully!");
     }
@@ -36,7 +36,7 @@ public class AuthController(IAuthService authService,
         
         return response.Success ? Ok(response) : Conflict(response);
     }
-
+    [ProducesDefaultResponseType]
     [HttpPost("login")]
     [ProducesResponseType(typeof(ServiceResponse<string>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ServiceResponse<string>), StatusCodes.Status401Unauthorized)]

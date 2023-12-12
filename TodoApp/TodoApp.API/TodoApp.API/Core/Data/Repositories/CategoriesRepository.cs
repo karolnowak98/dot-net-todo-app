@@ -1,61 +1,33 @@
+using MediatR;
 using TodoApp.API.DTOs.Tasks;
-using TodoApp.API.Exceptions;
 using TodoApp.API.Interfaces;
 using TodoApp.API.Models.Category;
 using TodoApp.API.Models.TaskCategory;
+using TodoApp.API.UseCases.Tasks.Commands;
+using TodoApp.API.UseCases.Tasks.Queries;
 
 namespace TodoApp.API.Core.Data.Repositories;
 
-public class CategoriesRepository(ApplicationDbContext context) : ICategoryRepository
+public class CategoriesRepository(ISender sender) : ICategoryRepository
 {
-    private readonly ApplicationDbContext _context = context ?? throw new DbContextNullException(nameof(context));
-        
-    private async Task<Category?> GetCategoryByIdAsync(Guid categoryId) 
-        => await _context.Categories.FindAsync(categoryId);
-    private async Task<Category?> GetCategoryByTypeAsync(CategoryType type) 
-        => await _context.Categories.FirstOrDefaultAsync(c => c!.Type == type);
-    private async Task<IEnumerable<TaskCategory>> GetTaskCategoriesForTaskAsync(Guid taskId) 
-        => await _context.TaskCategories.Where(tc => tc.TaskId == taskId).ToListAsync();
-        
+    public async Task<Category?> GetCategoryByIdAsync(Guid categoryId)
+        => await sender.Send(new GetCategoryByIdQuery(categoryId));
+
+    public async Task<Category?> GetCategoryByTypeAsync(CategoryType type)
+        => await sender.Send(new GetCategoryByTypeQuery(type));
+    
+    public async Task<IEnumerable<TaskCategory>> GetTaskCategoriesForTaskAsync(Guid taskId) 
+        => await sender.Send(new GetTaskCategoriesForTaskQuery(taskId));
+
     public async Task<Guid?> GetIdByTypeAsync(CategoryType type)
-    {
-        var category = await GetCategoryByTypeAsync(type);
-            
-        return category?.Id;
-    }
+        => await sender.Send(new GetCategoryIdByTypeQuery(type));
 
     public async Task<bool> CreateCategoryAsync(Category category)
-    {
-        await context.Categories.AddAsync(category);
-        var changes = await context.SaveChangesAsync();
-        return changes > 0;
-    }
+        => await sender.Send(new CreateCategoryCommand(category));
 
-    public async Task ClearTableAsync()
-    {
-        var categories = await context.Categories.ToListAsync();
-        context.Categories.RemoveRange(categories);
-        await context.SaveChangesAsync();
-    }
-        
+    public async Task<bool> ClearTableAsync()
+        => await sender.Send(new ClearTableCommand());
 
     public async Task<IEnumerable<CategoryDto>> GetAllForTaskAsync(Guid taskId)
-    {
-        var taskCategories = await GetTaskCategoriesForTaskAsync(taskId);
-        var categories = new List<CategoryDto>();
-            
-        foreach (var taskCategory in taskCategories)
-        {
-            var category = await GetCategoryByIdAsync(taskCategory.CategoryId);
-
-            if (category == null)
-            {
-                continue;
-            }
-                
-            categories.Add(new CategoryDto { Type = category.Type });
-        }
-
-        return categories;
-    }
+        => await sender.Send(new GetAllCategoriesForTaskQuery(taskId));
 }

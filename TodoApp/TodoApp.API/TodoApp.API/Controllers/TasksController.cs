@@ -8,7 +8,7 @@ namespace TodoApp.API.Controllers;
 [ApiController]
 public class TasksController(ITasksService service) : ControllerBase
 {
-    [Authorize(Roles = StaticUserRoles.USER)]
+    [Authorize(Roles = StaticUserRoles.User)]
     [HttpGet("get-all")] 
     [ProducesResponseType(typeof(ServiceResponse<IEnumerable<GetTaskDto>>),StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ServiceResponse<IEnumerable<GetTaskDto>>),StatusCodes.Status400BadRequest)]
@@ -20,7 +20,7 @@ public class TasksController(ITasksService service) : ControllerBase
         return response.Success ? Ok(response) : BadRequest(response);
     }
         
-    [Authorize(Roles = StaticUserRoles.USER)]
+    [Authorize(Roles = StaticUserRoles.User)]
     [HttpPost("create-task")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -32,7 +32,7 @@ public class TasksController(ITasksService service) : ControllerBase
         return response.Success ? Ok(response) : BadRequest(response);
     }
         
-    [Authorize(Roles = StaticUserRoles.USER)]
+    [Authorize(Roles = StaticUserRoles.User)]
     [HttpPut("update-task-status")]
     [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(bool),StatusCodes.Status400BadRequest)]
