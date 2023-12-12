@@ -1,8 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 
-import { GetTaskDto } from "../../shared/interfaces/dtos/get-task-dto.interface";
+import { UpdateStatusTaskDto } from "../../shared/interfaces/dtos/tasks/update-status-task-dto.interface";
+import { GetTaskDto } from "../../shared/interfaces/dtos/tasks/get-task-dto.interface";
+import { ServiceResponse} from "../../shared/interfaces/service-response.interface";
 import { TasksService } from "../../services/tasks.service";
-import { ServiceResponse } from "../../shared/interfaces/service-response.interface";
+import { TaskStatus } from "../../shared/enums/task-status.enum";
+import { catchError, switchMap } from "rxjs/operators";
+import { of } from "rxjs";
 
 @Component({
   selector: 'app-tasks',
@@ -12,9 +16,15 @@ import { ServiceResponse } from "../../shared/interfaces/service-response.interf
 export class TasksComponent implements OnInit{
   tasks: GetTaskDto[] = [];
 
+  isUpdatingStatus = false;
+
   constructor(private taskService: TasksService) { }
 
   ngOnInit(): void {
+    this.getTasks();
+  }
+
+  getTasks() : void{
     this.taskService.getTasks().subscribe({
       next: (response: ServiceResponse<GetTaskDto[]>) => {
         if (response && response.success) {
@@ -25,9 +35,6 @@ export class TasksComponent implements OnInit{
       },
       error: (error) => {
         // Obsłuż błąd
-      },
-      complete: () => {
-        // Obsłuż zakończenie (opcjonalne)
       }
     });
   }
@@ -38,5 +45,41 @@ export class TasksComponent implements OnInit{
 
   addTask(task : GetTaskDto) : void{
 
+  }
+
+  toggleTaskStatus(id: string, status: TaskStatus): void {
+
+    if(this.isUpdatingStatus){
+      return;
+    }
+
+    const taskIndex = this.tasks.findIndex(task => task.id === id);
+    if (taskIndex !== -1) {
+      this.tasks[taskIndex].status = status === TaskStatus.Completed ? TaskStatus.NotCompleted : TaskStatus.Completed;
+      this.isUpdatingStatus = true;
+
+      const updateTaskDto: UpdateStatusTaskDto = {
+        id: id,
+        status: this.tasks[taskIndex].status
+      };
+
+      this.taskService.updateTaskStatus(updateTaskDto).pipe(
+        catchError((errorResponse) => {
+          console.log(errorResponse.error);
+          this.tasks[taskIndex].status = status;
+          return of(null);
+        }),
+        switchMap(() => {
+          this.isUpdatingStatus = false;
+          return of(null);
+        })
+      ).subscribe({
+        next: (response) => {
+          if (response && response) {
+            console.log("Success");
+          }
+        }
+      });
+    }
   }
 }

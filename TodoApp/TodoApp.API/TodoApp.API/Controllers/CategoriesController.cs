@@ -1,30 +1,28 @@
-namespace TodoApp.API.Controllers
+using TodoApp.API.Interfaces;
+
+namespace TodoApp.API.Controllers;
+
+[Route("api/[controller]")]
+[ApiController]
+public class CategoriesController(ICategoriesService service) : ControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class CategoriesController : ControllerBase
+    [HttpPost("create-categories")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> CreateCategories()
     {
-        private readonly ICategoriesService _service;
+        var response = await service.CreateAllCategoriesByTypesAsync();
 
-        public CategoriesController(ICategoriesService service)
-        {
-            _service = service;
-        }
+        return response.Success ? Ok(response) : BadRequest(response);
+    }
 
-        [HttpPost("create-categories")]
-        public async Task<IActionResult> CreateCategories()
-        {
-            var response = await _service.CreateAllCategoriesByTypesAsync();
+    [HttpDelete("delete-categories")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> DeleteCategories()
+    {
+        var response = await service.DeleteAllCategoriesAsync();
 
-            return response.Success ? Ok(response) : BadRequest(response);
-        }
-
-        [HttpDelete("delete-categories")]
-        public async Task<IActionResult> DeleteCategories()
-        {
-            var response = await _service.DeleteAllCategoriesAsync();
-
-            return response.Success ? Ok(response) : BadRequest(response);
-        }
+        return response.Success ? Ok(response) : BadRequest(response);
     }
 }

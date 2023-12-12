@@ -1,8 +1,7 @@
-namespace TodoApp.API.Models.TaskCategory
+namespace TodoApp.API.Models.TaskCategory;
+
+public class TaskCategory
 {
-    public class TaskCategory
-    {
-        public Guid TaskId { get; set; }
-        public Guid CategoryId { get; set; }
-    }
+    public Guid TaskId { get; set; }
+    public Guid CategoryId { get; set; }
 }

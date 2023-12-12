@@ -1,25 +1,22 @@
-using TodoApp.API.Core.Models;
+using TodoApp.API.Core.Data.Identity;
 using TodoApp.API.Models.Category;
 using TodoApp.API.Models.TaskCategory;
 using Task = TodoApp.API.Models.Task.Task;
 
-namespace TodoApp.API.Core.Data
-{
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, string>
-    {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
+namespace TodoApp.API.Core.Data;
 
-        protected override void OnModelCreating(ModelBuilder builder)
-        {
-            base.OnModelCreating(builder);
+public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+    : IdentityDbContext<ApplicationUser, ApplicationRole, string>(options)
+{
+    protected override void OnModelCreating(ModelBuilder builder)
+    {
+        base.OnModelCreating(builder);
             
-            builder.Entity<TaskCategory>().HasNoKey();
-            
-            builder.Entity<Category>().Property(e => e.Type).HasConversion<int>();
-        }
-        
-        public DbSet<Task> Tasks { get; set; }
-        public DbSet<Category> Categories { get; set; }
-        public DbSet<TaskCategory> TaskCategories { get; set; }
+        builder.Entity<TaskCategory>().HasNoKey();
+        builder.Entity<Category>().Property(e => e.Type).HasConversion<int>();
     }
+        
+    public DbSet<Task> Tasks { get; set; }
+    public DbSet<Category> Categories { get; set; }
+    public DbSet<TaskCategory> TaskCategories { get; set; }
 }
