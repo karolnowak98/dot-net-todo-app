@@ -14,6 +14,7 @@ public static class ServicesExtensions
         services.AddScoped<ICategoryRepository, CategoriesRepository>();
 
         services.AddScoped<IUsersService, UsersService>();
+        services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<ITasksService, TasksService>();
         services.AddScoped<ICategoriesService, CategoriesService>();
     }

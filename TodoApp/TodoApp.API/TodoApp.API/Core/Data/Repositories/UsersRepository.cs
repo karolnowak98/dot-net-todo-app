@@ -12,7 +12,7 @@ public class UsersRepository(UserManager<ApplicationUser> manager,
     private readonly ApplicationDbContext _context = context ?? throw new DbContextNullException(nameof(context));
     
     public async Task<ApplicationUser?> GetByEmailAsync(string email)
-        => await manager.Users.FirstOrDefaultAsync(u => u.Email == email);
+        => await _context.Users.Where(u => u.Email == email).FirstOrDefaultAsync();
 
     public async Task<IEnumerable<string>> GetRolesAsync(ApplicationUser user)
         => await manager.GetRolesAsync(user);

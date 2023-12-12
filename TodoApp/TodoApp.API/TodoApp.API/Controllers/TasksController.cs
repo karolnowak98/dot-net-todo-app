@@ -10,6 +10,8 @@ public class TasksController(ITasksService service) : ControllerBase
 {
     [Authorize(Roles = StaticUserRoles.USER)]
     [HttpGet("get-all")] 
+    [ProducesResponseType(typeof(ServiceResponse<IEnumerable<GetTaskDto>>),StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ServiceResponse<IEnumerable<GetTaskDto>>),StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<ServiceResponse<IEnumerable<GetTaskDto>>>> GetAll()
     {
         var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier) ?? string.Empty);
@@ -20,6 +22,8 @@ public class TasksController(ITasksService service) : ControllerBase
         
     [Authorize(Roles = StaticUserRoles.USER)]
     [HttpPost("create-task")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CreateTask([FromBody] GetTaskDto getTaskDto)
     {
         var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier) ?? string.Empty);
@@ -30,6 +34,8 @@ public class TasksController(ITasksService service) : ControllerBase
         
     [Authorize(Roles = StaticUserRoles.USER)]
     [HttpPut("update-task-status")]
+    [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(bool),StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<ServiceResponse<bool>>> UpdateTaskStatus([FromBody] UpdateStatusTaskDto updateStatusTaskDto)
     {
         var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier) ?? string.Empty);

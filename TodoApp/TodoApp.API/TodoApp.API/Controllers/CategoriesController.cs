@@ -7,6 +7,8 @@ namespace TodoApp.API.Controllers;
 public class CategoriesController(ICategoriesService service) : ControllerBase
 {
     [HttpPost("create-categories")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CreateCategories()
     {
         var response = await service.CreateAllCategoriesByTypesAsync();
@@ -15,6 +17,8 @@ public class CategoriesController(ICategoriesService service) : ControllerBase
     }
 
     [HttpDelete("delete-categories")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> DeleteCategories()
     {
         var response = await service.DeleteAllCategoriesAsync();
